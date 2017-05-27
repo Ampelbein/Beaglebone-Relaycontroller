@@ -36,9 +36,9 @@ class RelayController {
 
 	private static $rollogpio = array(8, 9, 10, 26, 44, 72, 74, 76, 78, 87, 48, 49);
 
-        private static $rollohochgpio = array(8, 10, 72, 49);
+    private static $rollohochgpio = array(8, 10, 72, 49);
 
-        private static $rolloruntergpio = array(9, 74, 87, 48);
+    private static $rolloruntergpio = array(9, 74, 87, 48);
 
 	private static $allTriggered = array(
 		'dinnerTable',
@@ -88,10 +88,10 @@ class RelayController {
 		}  elseif ($relay === 'allRolHo') {
 			$this->rolloHoch();
 		}  elseif ($relay === 'allRolRu') {
-                        $this->rolloRunter();
-                }  elseif ($relay === 'all') {
+            $this->rolloRunter();
+        }  elseif ($relay === 'all') {
 			$this->triggerAll($mode);
-		}    else {
+		}  else {
 			$this->gpioNumber = self::$relays[$relay];
 			if (in_array($relay, self::$doors)) {
 				$this->openDoor();
@@ -102,8 +102,8 @@ class RelayController {
 				$this->{$function}();
 				exec('echo high >> /tmp/gpio' . self::$relays[$relay]);
 			} elseif (in_array($relay, self::$rollostop)) {
-                                $function = 'rollo' . $raum;
-                                $this->{$function}();
+                $function = 'rollo' . $raum;
+                $this->{$function}();
 			} else {
 				$function = 'relay' . $mode;
 				$this->{$function}();
@@ -143,16 +143,16 @@ class RelayController {
 		}
 	}
 
-        private function rolloRunter() {
-                foreach(self::$rollogpio as $rolloNumber) {
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
-                exec('echo high >> /tmp/gpio' . $rolloNumber . '');
-                }
-                foreach(self::$rolloruntergpio as $rolloNumber) {
-                exec('echo low | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
-                exec('echo high >> /tmp/gpio' . $rolloNumber . '');
-                }
-        }
+    private function rolloRunter() {
+		foreach(self::$rollogpio as $rolloNumber) {
+            exec('echo high | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
+			exec('echo high >> /tmp/gpio' . $rolloNumber . '');
+			}
+		foreach(self::$rolloruntergpio as $rolloNumber) {
+			exec('echo low | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
+			exec('echo high >> /tmp/gpio' . $rolloNumber . '');
+			}
+	}
 
 	private function rolloBuero() {
 		exec('echo high | sudo tee -a /sys/class/gpio/gpio10/direction');
@@ -160,35 +160,35 @@ class RelayController {
 		exec('sleep 1');
 	}
 
-        private function rolloWohnf() {
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio8/direction');
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio9/direction');
-                exec('sleep 1');
-        }
+	private function rolloWohnf() {
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio8/direction');
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio9/direction');
+		exec('sleep 1');
+	}
 
-        private function rolloWohnt() {
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio78/direction');
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio76/direction');
-                exec('sleep 1');
-        }
+	private function rolloWohnt() {
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio78/direction');
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio76/direction');
+		exec('sleep 1');
+	}
 
-        private function rolloSusan() {
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio74/direction');
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio72/direction');
-                exec('sleep 1');
-        }
+	private function rolloSusan() {
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio74/direction');
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio72/direction');
+		exec('sleep 1');
+	}
 
-        private function rolloSchlt() {
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio30/direction');
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio31/direction');
-                exec('sleep 1');
-        }
+	private function rolloSchlt() {
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio30/direction');
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio31/direction');
+		exec('sleep 1');
+	}
 
-        private function rolloSchlf() {
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio49/direction');
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio48/direction');
-                exec('sleep 1');
-        }
+	private function rolloSchlf() {
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio49/direction');
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio48/direction');
+		exec('sleep 1');
+	}
 
 	private function rolloGarag() {
 		exec('echo high | sudo tee -a /sys/class/gpio/gpio26/direction');
@@ -207,10 +207,10 @@ class RelayController {
 	}
 
 	private function relayOn() {
-                exec('echo low | sudo tee -a /sys/class/gpio/gpio' . $this->gpioNumber . '/direction');
+		exec('echo low | sudo tee -a /sys/class/gpio/gpio' . $this->gpioNumber . '/direction');
 	}
 
 	private function relayOff() {
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio' . $this->gpioNumber . '/direction');
+		exec('echo high | sudo tee -a /sys/class/gpio/gpio' . $this->gpioNumber . '/direction');
 	}
 }
