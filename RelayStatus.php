@@ -3,7 +3,7 @@
 
 		<script>$(function(){ $(".btn").on('click',(function()
 			{ $.get("index.php?relay="+$(this).attr('name'));
-			  setTimeout('$("#allebuttons").load("relaystatus.php");', 1000);
+			  setTimeout('$("#allebuttons").load("RelayStatus.php");', 1000);
 		})); });</script>
 				<h2>Licht</h2>
 				<div class="input-group btn-group" id="wohnzimmerlicht">
