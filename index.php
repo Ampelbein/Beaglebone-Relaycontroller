@@ -6,12 +6,6 @@
 		<meta charset="utf-8">
 		<title>Remote control</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<?php
-		if (!empty($_GET))
-		{
-		echo '<META HTTP-EQUIV="refresh" CONTENT="0; URL=index.php">';
-		}
-		?>
 		<!-- Bootstrap -->
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
 		<link href="styles.css" rel="stylesheet" media="screen">
