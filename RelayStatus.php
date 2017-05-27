@@ -1,4 +1,4 @@
-<?php
+4<?php
 ?>
 
 		<script>$(function(){ $(".btn").on('click',(function()
@@ -6,11 +6,9 @@
 			  setTimeout('$("#allebuttons").load("RelayStatus.php");', 1000);
 		})); });</script>
 				<h2>Licht</h2>
-				<div class="input-group btn-group" id="wohnzimmerlicht">
 					<span class="input-group-addon">Wohnzimmer</span>
-					<input type="button" class="btn btn-success" name="livingRoom1" id="livingRoom1" <?php $relaystatus=system("cat /sys/class/gpio/gpio11/value"); echo $relaystatus=="1" ? '' : 'style="visibility:hidden"' ?> value="An" />
-					<input type="button" class="btn btn-danger" name="livingRoom0" id="livingRoom0" <?php $relaystatus=system("cat /sys/class/gpio/gpio11/value"); echo $relaystatus=="0" ? '' : 'style="visibility:hidden"' ?>  value="Aus" />
-				</div>
+				<input type="button" class="btn btn-success" name="livingRoom1" id="livingRoom1" <?php $relaystatus=system("cat /sys/class/gpio/gpio11/value"); echo $relaystatus=="1" ? '' : 'style="visibility:hidden"' ?> value="An" />
+				<input type="button" class="btn btn-danger" name="livingRoom0" id="livingRoom0" <?php $relaystatus=system("cat /sys/class/gpio/gpio11/value"); echo $relaystatus=="0" ? '' : 'style="visibility:hidden"' ?>  value="Aus" />
 				<div class="input-group btn-group">
 					<span class="input-group-addon">Balkon</span>
 				<input type="button" class="btn btn-success" name="balcony1" <?php $relaystatus=system("cat /sys/class/gpio/gpio61/value"); echo $relaystatus=="1" ? '' : 'style="visibility:hidden"' ?> value="An" />
