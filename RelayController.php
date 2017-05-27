@@ -9,7 +9,7 @@ class RelayController {
 		'balcony' => 61,
 		'strahler' => 89,
 		'strahlerBoden' => 65,
-                'klima' => 50,
+        'klima' => 50,
 		'klimaAnd' => 115,
 		'esstisch' => 60,
 		'BueroHoch' => 10,
@@ -100,6 +100,7 @@ class RelayController {
 				$this->{$function}();
 				$function = 'relay' . $mode;
 				$this->{$function}();
+				exec('echo high >> /tmp/gpio' . self::$relays[$relay]);
 			} elseif (in_array($relay, self::$rollostop)) {
                                 $function = 'rollo' . $raum;
                                 $this->{$function}();
@@ -134,18 +135,22 @@ class RelayController {
 	private function rolloHoch() {
 		foreach(self::$rollogpio as $rolloNumber) {
                 exec('echo high | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
+                exec('echo high >> /tmp/gpio' . $rolloNumber . '');
 		}
                 foreach(self::$rollohochgpio as $rolloNumber) {
                 exec('echo low | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
+                exec('echo high >> /tmp/gpio' . $rolloNumber . '');
 		}
 	}
 
         private function rolloRunter() {
                 foreach(self::$rollogpio as $rolloNumber) {
                 exec('echo high | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
+                exec('echo high >> /tmp/gpio' . $rolloNumber . '');
                 }
                 foreach(self::$rolloruntergpio as $rolloNumber) {
                 exec('echo low | sudo tee -a /sys/class/gpio/gpio' . $rolloNumber . '/direction');
+                exec('echo high >> /tmp/gpio' . $rolloNumber . '');
                 }
         }
 
@@ -187,8 +192,8 @@ class RelayController {
 
 	private function rolloGarag() {
 		exec('echo high | sudo tee -a /sys/class/gpio/gpio26/direction');
-                exec('echo high | sudo tee -a /sys/class/gpio/gpio44/direction');
-                exec('sleep 1');
+        exec('echo high | sudo tee -a /sys/class/gpio/gpio44/direction');
+        exec('sleep 1');
         }
 
 	private function openDoor() {
