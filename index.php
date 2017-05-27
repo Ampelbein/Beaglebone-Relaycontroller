@@ -15,7 +15,6 @@
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
 		<link href="styles.css" rel="stylesheet" media="screen">
 		<script src="script/jquery.js"></script>
-		<script>$(document).ready(function(){$("#Lightsdescription").click(function(){$("#Lights").toggle();});});</script>
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top">
