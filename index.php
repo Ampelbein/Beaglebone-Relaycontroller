@@ -16,7 +16,6 @@
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
 		<link href="styles.css" rel="stylesheet" media="screen">
 		<script src="script/jquery.js"></script>
-		<script type="text/javascript" src="script2.js"></script>
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top">
