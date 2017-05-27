@@ -1,0 +1,215 @@
+<?php
+
+class RelayController {
+
+	private static $relays = array(
+		'dinnerTable' => 88,
+		'livingRoom' => 11,
+		'openDoor' => 46,
+		'balcony' => 61,
+		'strahler' => 89,
+		'strahlerBoden' => 65,
+                'klima' => 50,
+		'klimaAnd' => 115,
+		'esstisch' => 60,
+		'BueroHoch' => 10,
+		'BueroRunter' => 87,
+		'BueroStop' => 10,
+		'WohnfHoch' => 8,
+		'WohnfRunter' => 9,
+		'WohnfStop' => 8,
+		'WohntHoch' => 76,
+		'WohntRunter' => 78,
+		'WohntStop' => 76,
+		'SusanHoch' => 72,
+		'SusanRunter' => 74,
+		'SusanStop' => 72,
+		'SchltHoch' => 31,
+		'SchltRunter' => 30,
+		'SchltStop' => 31,
+		'SchlfHoch' => 49,
+		'SchlfRunter' => 48,
+		'SchlfStop' => 49,
+		'GaragHoch' => 26,
+		'GaragRunter' => 44,
+		'GaragStop' => 26
+	);
+
+	private static $rollogpio = array(8, 9, 10, 26, 44, 72, 74, 76, 78, 87, 30, 31, 48, 49);
+
+        private static $rollohochgpio = array(8, 10, 26, 72, 31, 49);
+
+        private static $rolloruntergpio = array(9, 44, 74, 87, 30, 48);
+
+	private static $allTriggered = array(
+		'dinnerTable',
+		'livingRoom',
+		'balcony',
+		'strahler',
+		'esstisch'
+	);
+
+	private static $doors = array(
+		'openDoor'
+	);
+
+	private static $rollos = array(
+		'BueroHoch',
+		'BueroRunter',
+		'WohnfHoch',
+		'WohnfRunter',
+		'WohntHoch',
+		'WohntRunter',
+		'SusanHoch',
+		'SusanRunter',
+		'SchltHoch',
+		'SchltRunter',
+		'SchlfHoch',
+		'SchlfRunter',
+		'GaragHoch',
+		'GaragRunter'
+	);
+
+	private static $rollostop = array(
+		'BueroStop',
+		'WohnfStop',
+		'WohntStop',
+		'SusanStop',
+		'SchltStop',
+		'SchlfStop',
+		'GaragStop'
+	);
+
+	private $gpioNumber;
+
+	public function triggerRelay() {
+		$buttonTriggered = $_GET['relay'];
+		$relay = substr($buttonTriggered, 0, strlen($buttonTriggered)-1);
+		$mode = substr($buttonTriggered, -1) ? 'On' : 'Off';
+		$raum = substr($buttonTriggered, 0, 5);
+		if ($relay === 'allRollo') {
+			$this->rolloStop();
+		}  elseif ($relay === 'allRolHo') {
+			$this->rolloHoch();
+		}  elseif ($relay === 'allRolRu') {
+                        $this->rolloRunter();
+                }  elseif ($relay === 'all') {
+			$this->triggerAll($mode);
+		}    else {
+			$this->gpioNumber = self::$relays[$relay];
+			if (in_array($relay, self::$doors)) {
+				$this->openDoor();
+			} elseif (in_array($relay, self::$rollos)) {
+				$function = 'rollo' . $raum;
+				$this->{$function}();
+				$function = 'relay' . $mode;
+				$this->{$function}();
+			} elseif (in_array($relay, self::$rollostop)) {
+                                $function = 'rollo' . $raum;
+                                $this->{$function}();
+			} else {
+				$function = 'relay' . $mode;
+				$this->{$function}();
+			}
+		}
+	}
+
+	private function triggerAll($mode) {
+		foreach(self::$allTriggered as $relay) {
+			$this->gpioNumber = self::$relays[$relay];
+			$this->prepareRelay();
+		}
+		unset($this->gpioNumber);
+		unset($relay);
+		foreach(self::$allTriggered as $relay) {
+			$this->gpioNumber = self::$relays[$relay];
+			exec('sleep 1');
+			$function = 'relay' . $mode;
+			$this->{$function}();
+		}
+	}
+
+	private function rolloStop() {
+		foreach(self::$rollogpio as $rolloNumber) {
+		exec('echo high ' . $rolloNumber . ' | sudo tee -a /blub/direction');
+		}
+	}
+
+	private function rolloHoch() {
+		foreach(self::$rollogpio as $rolloNumber) {
+                exec('echo high ' . $rolloNumber . ' | sudo tee -a /blub/direction');
+		}
+                foreach(self::$rollohochgpio as $rolloNumber) {
+                exec('echo low ' . $rolloNumber . ' | sudo tee -a /blub/direction');
+		}
+	}
+
+        private function rolloRunter() {
+                foreach(self::$rollogpio as $rolloNumber) {
+                exec('echo high ' . $rolloNumber . ' | sudo tee -a /blub/direction');
+                }
+                foreach(self::$rolloruntergpio as $rolloNumber) {
+                exec('echo low ' . $rolloNumber . ' | sudo tee -a /blub/direction');
+                }
+        }
+
+	private function rolloBuero() {
+		exec('echo high 10 | sudo tee -a /blub/direction');
+		exec('echo high 87 | sudo tee -a /blub/direction');
+		exec('sleep 1');
+	}
+
+        private function rolloWohnf() {
+                exec('echo high 8 | sudo tee -a /blub/direction');
+                exec('echo high 9 | sudo tee -a /blub/direction');
+                exec('sleep 1');
+        }
+
+        private function rolloWohnt() {
+                exec('echo high 78 | sudo tee -a /blub/direction');
+                exec('echo high 76 | sudo tee -a /blub/direction');
+                exec('sleep 1');
+        }
+
+        private function rolloSusan() {
+                exec('echo high 74 | sudo tee -a /blub/direction');
+                exec('echo high 72 | sudo tee -a /blub/direction');
+                exec('sleep 1');
+        }
+
+        private function rolloSchlt() {
+                exec('echo high 30 | sudo tee -a /blub/direction');
+                exec('echo high 31 | sudo tee -a /blub/direction');
+                exec('sleep 1');
+        }
+
+        private function rolloSchlf() {
+                exec('echo high 49 | sudo tee -a /blub/direction');
+                exec('echo high 48 | sudo tee -a /blub/direction');
+                exec('sleep 1');
+        }
+
+	private function rolloGarag() {
+		exec('echo high 26 | sudo tee -a /blub/direction');
+                exec('echo high 44 | sudo tee -a /blub/direction');
+                exec('sleep 1');
+        }
+
+	private function openDoor() {
+		exec('echo low ' . $this->gpioNumber . ' | sudo tee -a /blub/direction');
+		exec('sleep 1');
+		exec('echo high ' . $this->gpioNumber . ' | sudo tee -a /blub/direction');
+	}
+
+	private function prepareRelay() {
+		exec('echo high ' . $this->gpioNumber . ' | sudo tee -a /blub/direction');
+	}
+
+	private function relayOn() {
+                exec('echo low ' . $this->gpioNumber . ' | sudo tee -a /blub/direction');
+	}
+
+	private function relayOff() {
+                exec('echo high ' . $this->gpioNumber . ' | sudo tee -a /blub/direction');
+	}
+}
